@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 
-from pathlib import Path
+from utils import *
 
 def plot_figure_3b(vread=0.3, std_scaling=3):
     """
@@ -18,7 +18,7 @@ def plot_figure_3b(vread=0.3, std_scaling=3):
 
     for idx in range(len(labels)):
         # Load data and plot
-        data = np.loadtxt(f'./data/figure_3/retention_grouped_state{idx}.txt')
+        data = np.loadtxt(f'{input_dir}/retention_grouped_state{idx}.txt')
         time, conductance, errs = data[:, 0], data[:, 1], data[:, 2] * std_scaling
         
         plt.errorbar(time, conductance, yerr=errs, fmt='o', alpha=alpha, label=labels[idx], c=colors[idx], mec='k', ms=5)
@@ -39,10 +39,10 @@ def plot_figure_3c(cycles=20, scale=1e6):
 
     for i in range(1, cycles):
         # load +ve and -ve IV sweeps at a given cycle for plotting
-        data = np.loadtxt(f'./data/figure_3/iv_positive_cycle{i}.txt')
+        data = np.loadtxt(f'{input_dir}/iv_positive_cycle{i}.txt')
         allPosData.append(data)
 
-        data = np.loadtxt(f'./data/figure_3/iv_negative_cycle{i}.txt')
+        data = np.loadtxt(f'{input_dir}/iv_negative_cycle{i}.txt')
         allNegData.append(data)
 
     # Plot positive side of the data
@@ -104,7 +104,7 @@ def plot_figure_3d(kernel=17, scale=1e-6, stuck_on_threshold=300):
         Conductance map of devices in a kernel randomly programmed to one of four conductance states from Figure 3b.
     """
     # Load data, convert units to μS
-    data = np.loadtxt(f"./data/figure_3/conductance_map_multibit_k{kernel}.txt")
+    data = np.loadtxt(f"{input_dir}/conductance_map_multibit_k{kernel}.txt")
     data = data * scale
 
     # Plot conductance map
@@ -135,7 +135,7 @@ def plot_figure_3e(kernel=17, scale=1e-6, bins=40):
     # Load data
     states = []
     for state in range(4):
-        data = np.loadtxt(f'./data/figure_3/conductance_hist_multibit_k{kernel}_state{state}.txt')#conductance_hist_multibit_k17_state0
+        data = np.loadtxt(f'{input_dir}/conductance_hist_multibit_k{kernel}_state{state}.txt')#conductance_hist_multibit_k17_state0
         states.append(data)
     
     # Plot
@@ -161,8 +161,8 @@ def plot_figure_3f(kernel=17, mode='backward'):
     """
 
     # Load data
-    itheory = np.loadtxt(f'./data/figure_3/mac_itheory_k{kernel}_mode{mode}.txt')
-    iexp = np.loadtxt(f'./data/figure_3/mac_iexp_k{kernel}_mode{mode}.txt')
+    itheory = np.loadtxt(f'{input_dir}/mac_itheory_k{kernel}_mode{mode}.txt')
+    iexp = np.loadtxt(f'{input_dir}/mac_iexp_k{kernel}_mode{mode}.txt')
 
     # Plot
     markersize = 5
@@ -194,18 +194,10 @@ def plot_figure_3f(kernel=17, mode='backward'):
 
 if __name__ == "__main__":
 
-    format = 'svg'
-    dpi = 1200
-    figsize = (4, 3)
-    output_dir = './generated_plots'
+    input_dir = f'./data/figure_3'
 
-    Path(output_dir).mkdir(parents=True, exist_ok=True)
-
-    # Figure 3
     plot_figure_3b()
     plot_figure_3c()
     plot_figure_3d()
     plot_figure_3e()
     plot_figure_3f()
-
-    plt.show()
