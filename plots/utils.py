@@ -1,5 +1,6 @@
 from pathlib import Path
 import matplotlib.pyplot as plt
+from scipy.stats import gaussian_kde
 
 format = 'svg'
 dpi = 1200
