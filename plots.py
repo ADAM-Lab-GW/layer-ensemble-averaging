@@ -27,7 +27,7 @@ def plot_figure_3b(vread=0.3, std_scaling=3):
     ax.set_ylabel('Conductance, $\mathit{G}$ (μS)')
     ax.set_xlabel('Time, $\mathit{t}$ (minutes)')
     plt.legend(title=' $\mathit{G_{req}}$')
-    plt.savefig(f'figure_3b.{format}', format=format, dpi=dpi)
+    plt.savefig(f'{output_dir}/figure_3b.{format}', format=format, dpi=dpi)
 
 def plot_figure_3c(cycles=20, scale=1e6):
     """
