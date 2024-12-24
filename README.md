@@ -1,5 +1,7 @@
 # Layer Ensemble Averaging for Fault Tolerance in Memristive Neural Networks
 
+[![DOI](https://zenodo.org/badge/878727544.svg)](https://doi.org/10.5281/zenodo.14550769)
+
 This repository contains code & data for the following paper:
 
 ```
