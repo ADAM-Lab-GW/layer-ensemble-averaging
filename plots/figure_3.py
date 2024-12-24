@@ -4,7 +4,7 @@ from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 
 from utils import *
 
-def plot_figure_3b(vread=0.3, std_scaling=3):
+def plot_figure_3b(input_dir, vread=0.3, std_scaling=3):
     """
         Device retention data showcasing effective 2-bit tuning of a representative device. 
         The error bars indicate three standard deviations.
@@ -29,7 +29,7 @@ def plot_figure_3b(vread=0.3, std_scaling=3):
     plt.legend(title=' $\mathit{G_{req}}$')
     plt.savefig(f'{output_dir}/figure_3b.{format}', format=format, dpi=dpi)
 
-def plot_figure_3c(cycles=20, scale=1e6):
+def plot_figure_3c(input_dir, cycles=20, scale=1e6):
     """
         Current vs. voltage (I-V) sweep curves over multiple cycles of a single representative device.
     """
@@ -99,7 +99,7 @@ def plot_figure_3c(cycles=20, scale=1e6):
 
     plt.savefig(f'{output_dir}/figure_3c_2.{format}', format=format, dpi=dpi)
 
-def plot_figure_3d(kernel=17, scale=1e-6, stuck_on_threshold=300):
+def plot_figure_3d(input_dir, kernel=17, scale=1e-6, stuck_on_threshold=300):
     """
         Conductance map of devices in a kernel randomly programmed to one of four conductance states from Figure 3b.
     """
@@ -128,7 +128,7 @@ def plot_figure_3d(kernel=17, scale=1e-6, stuck_on_threshold=300):
     print(f'# of stuck ON devices for kernel {kernel}:', np.sum(data > stuck_on_threshold))
     print(f'Average stuck ON conductance for kernel {kernel} (μS):', np.average(data[stuck_mask]))
 
-def plot_figure_3e(kernel=17, scale=1e-6, bins=40):
+def plot_figure_3e(input_dir, kernel=17, scale=1e-6, bins=40):
     """
         Conductance distributions of devices in a kernel randomly programmed to one of four conductance states from Figure 3b.
     """
@@ -154,7 +154,7 @@ def plot_figure_3e(kernel=17, scale=1e-6, bins=40):
     
     plt.savefig(f'{output_dir}/figure_3e.{format}', format=format, dpi=dpi)
 
-def plot_figure_3f(kernel=17, mode='backward'):
+def plot_figure_3f(input_dir, kernel=17, mode='backward'):
     """
         Comparison of theoretical accumulated currents and experimental accumulated currents on the kernel for 100 randomly generated input voltage
         vectors repeated for a total of 20 iterations.
@@ -196,8 +196,8 @@ if __name__ == "__main__":
 
     input_dir = f'./data/figure_3'
 
-    plot_figure_3b()
-    plot_figure_3c()
-    plot_figure_3d()
-    plot_figure_3e()
-    plot_figure_3f()
+    plot_figure_3b(input_dir=f"{input_dir}/b")
+    plot_figure_3c(input_dir=f"{input_dir}/c")
+    plot_figure_3d(input_dir=f"{input_dir}/d")
+    plot_figure_3e(input_dir=f"{input_dir}/e")
+    plot_figure_3f(input_dir=f"{input_dir}/f")

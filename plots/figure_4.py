@@ -4,7 +4,7 @@ from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 
 from utils import *
 
-def plot_figure_4b(alphas=range(1, 7), metric='accuracy'):
+def plot_figure_4b(input_dir, alphas=range(1, 7), metric='accuracy'):
     """
         Network test accuracies and mapping errors averaged across network layers at
         increasing levels of device stuck-at faults and the redundancy parameter 𝛼 for each fault tolerance scheme. 
@@ -87,5 +87,5 @@ if __name__ == "__main__":
 
     sw_baseline = (94.49, 0.12)
 
-    plot_figure_4b(metric='accuracy')
-    plot_figure_4b(metric='mappingerror')
+    plot_figure_4b(input_dir=f"{input_dir}/b", metric='accuracy')
+    plot_figure_4b(input_dir=f"{input_dir}/b", metric='mappingerror')

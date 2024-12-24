@@ -4,7 +4,7 @@ from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 
 from utils import *
 
-def plot_figure_5a():
+def plot_figure_5a(input_dir):
     """
         Visualize the double Yin-Yang variant.
     """
@@ -49,7 +49,7 @@ def plot_figure_5a():
     plt.savefig(f'{output_dir}/figure_5a.{format}', format=format, dpi=dpi)
 
 
-def plot_figure_5b(mapping_scheme, encoding_scheme, sampling_iters, alphas, metric):
+def plot_figure_5b(input_dir, mapping_scheme, encoding_scheme, sampling_iters, alphas, metric):
     """
         Mean test accuracies (or errors) for layer ensemble averaging at increasing values of redundancy parameters
         𝛼 ∈ [ , ] and 𝛽 ∈ [ , 𝛼] under different combinations of the greedy and random mapping algorithms with the simple
@@ -169,6 +169,93 @@ def plot_figure_5b(mapping_scheme, encoding_scheme, sampling_iters, alphas, metr
     plt.xlim(0, alpha*(1+alpha))
     plt.savefig(f'{output_dir}/figure_5b_{mapping_scheme}_{encoding_scheme}_samplingiters{sampling_iters}_metric{metric}.{format}', format=format, dpi=dpi)
 
+def plot_figure_5c(input_dir, mapping_scheme, encoding_scheme, cycle, alpha, beta, sampling_iters, plot_cbar=False, scale=10**6):
+    """
+        A subset of hardware mappings 𝐆𝐩𝐨𝐬 and 𝐆𝐧𝐞𝐠 of the first fully connected network layer from a single cycle of the inference
+        process for a given configuration. The kernel, column, and row labels correspond to physical locations on the chip.
+    """
+    # Step 1: Let's pull a list of kernels for this particular combination (mapping_scheme, encoding_scheme, alpha, beta) from the offset information
+    with open(f'{input_dir}/networkmlp_yinyang_daffodil_hw_weightencoding{encoding_scheme}_xbmapping{mapping_scheme}_alpha{alpha}_beta{beta}_samplingiters{sampling_iters}_cycle{cycle}_offsets.txt') as f:
+        offsets = [list(literal_eval(line)) for line in f][0]
+
+    OUTLINE_WIDTH = 1
+    COLOR_GNEG = 'blue'
+    COLOR_GPOS = 'red'
+    COLOR_OUTLINE = 'k'
+    scale = 10**6
+
+    # and while we're at it, let's also populate mapping information (kernel, column, row) for each layer
+    layer_information = {}
+
+    for layer_num, layer_offsets in enumerate(offsets): # for each layer
+        assert len(layer_offsets) == alpha
+
+        for gneg, gpos in layer_offsets:
+            # first, for gneg
+            k, x, y, shape = gneg
+
+            if (layer_num not in layer_information):
+                layer_information[layer_num] = []
+
+            mapping_info = (k, x, y, shape[0], shape[1], str(layer_num + 1), COLOR_GNEG, COLOR_OUTLINE, OUTLINE_WIDTH)
+            layer_information[layer_num].append(mapping_info)
+
+            # then, for gpos
+            k, x, y, shape = gpos
+
+            if (layer_num not in layer_information):
+                layer_information[layer_num] = []
+
+            mapping_info = (k, x, y, shape[0], shape[1], str(layer_num + 1), COLOR_GPOS, COLOR_OUTLINE, OUTLINE_WIDTH)
+            layer_information[layer_num].append(mapping_info)
+
+    # Step 2: Let's go over each kernel, plot conductances as well as the layer mappings extracted above
+    layer_list = [0] # only interested in plotting the first layer (4x12)
+
+    n_cols = 2
+    n_rows = 4
+    
+    for layer in (layer_list):
+
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(figsize[0] * n_cols, figsize[1] * n_rows), sharex=False, sharey=False, layout='compressed')
+        axes = axes.ravel()
+        mapping_info = layer_information[layer]
+
+        for idx, (kernel, col, row, width, height, number, number_color, box_color, box_thickness) in enumerate(mapping_info):
+
+            xedges = range(col, col+width, 1)
+            yedges = range(row, row+height, 1)
+
+            filename = f'{input_dir}/networkmlp_yinyang_daffodil_hw_weightencoding{encoding_scheme}_xbmapping{mapping_scheme}_alpha{alpha}_beta{beta}_samplingiters{sampling_iters}_cycle{cycle}_kernel{kernel}.txt' 
+            data = np.loadtxt(filename)[col:col+width, row:row+height]
+
+            xticks = range(col, col+width, 1)
+            yticks = range(row, row+height, 2)
+
+            ax = axes[idx]
+            ax.set_box_aspect(1)
+
+            surf = ax.pcolormesh(xedges, yedges, data.T * scale, alpha=1, antialiased=True, linewidth=0.0, zorder=-1, cmap='viridis', vmin=100, vmax=270)
+            surf.set_edgecolor('face')
+            ax.axis('image')
+
+            if (idx % n_cols == 0): ax.set_ylabel('Row (#)')
+            if (idx >= 6): ax.set_xlabel('Column (#)')
+            ax.set_xticks(xticks)
+            ax.set_yticks(yticks)
+            ax.set_title(f'Kernel {kernel}')
+
+        # Remove any unused subplots if the number of kernels is less than n_cols * n_rows
+        for idx in range(len(mapping_info), n_cols * n_rows):
+            fig.delaxes(axes[idx])
+
+        if (plot_cbar):
+            plt.subplots_adjust(right=0.8, top=0.95, bottom=0.1, hspace=0.45, wspace=-0.8)
+            cbar = fig.colorbar(surf, ax=axes, orientation='vertical', fraction=0.02, pad=0.04)
+            cbar.set_label('Conductance, $\mathit{G}$ (μS)')
+
+        plt.savefig(f'{output_dir}/figure5c_layer{layer}_mapping{mapping_scheme}_encoding{encoding_scheme}.{format}', format=format, dpi=dpi)
+
 if __name__ == "__main__":
     
     input_dir = f'./data/figure_5'
@@ -177,15 +264,15 @@ if __name__ == "__main__":
     encoding_schemes = ['simple', 'rme']
 
     # Figure 5a
+    plot_figure_5a(input_dir=f"{input_dir}/a")
 
-    plot_figure_5a()
-
-    # Figure 5b
-    # for mapping_scheme in mapping_schemes:
-    #     for encoding_scheme in encoding_schemes:
-    #         sampling_iters = -1 if mapping_scheme == 'greedy' else 1000
-    #         # Plot accuracy
-    #         plot_figure_5b(mapping_scheme=mapping_scheme, encoding_scheme=encoding_scheme, sampling_iters=sampling_iters, alphas = range(1, 5), metric='accuracy')
-    #         # Plot mapping error (not part of Figure 5, can be uncommented)
-    #         # plot_figure_5b(mapping_scheme=mapping_scheme, encoding_scheme=encoding_scheme, sampling_iters=sampling_iters, alphas = range(1, 5), metric='mappingerror')
-    plt.show()
+    for mapping_scheme in mapping_schemes:
+        for encoding_scheme in encoding_schemes:
+            # Figure 5b
+            sampling_iters = -1 if mapping_scheme == 'greedy' else 1000
+            # Plot accuracy
+            plot_figure_5b(input_dir=f"{input_dir}/b", mapping_scheme=mapping_scheme, encoding_scheme=encoding_scheme, sampling_iters=sampling_iters, alphas = range(1, 5), metric='accuracy')
+            # Plot mapping error (not part of Figure 5, can be uncommented)
+            # plot_figure_5b(mapping_scheme=mapping_scheme, encoding_scheme=encoding_scheme, sampling_iters=sampling_iters, alphas = range(1, 5), metric='mappingerror')
+            # Figure 5c
+            plot_figure_5c(input_dir=f"{input_dir}/c", mapping_scheme=mapping_scheme, encoding_scheme=encoding_scheme, sampling_iters=sampling_iters, alpha=4, beta=4, cycle=0, plot_cbar=False)
