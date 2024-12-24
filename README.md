@@ -4,7 +4,7 @@ This repository contains code & data for the following paper:
 
 ```
 @article{yousuf2024layer,
-  title={Layer Ensemble Averaging for Improving Memristor-Based Artificial Neural Network Performance},
+  title={Layer Ensemble Averaging for Fault Tolerance in Memristive Neural Networks},
   author={Yousuf, Osama and Hoskins, Brian and Ramu, Karthick and Fream, Mitchell and Borders, William A and Madhavan, Advait and Daniels, Matthew W and Dienstfrey, Andrew and McClelland, Jabez J and Lueker-Boden, Martin and Adam, Gina C},
   journal={arXiv preprint arXiv:2404.15621},
   year={2024}
@@ -77,7 +77,7 @@ To cite *Layer Ensemble Averaging for Fault Tolerance in Memristive Neural Netwo
 
 ```
 @article{yousuf2024layer,
-  title={Layer Ensemble Averaging for Improving Memristor-Based Artificial Neural Network Performance},
+  title={Layer Ensemble Averaging for Fault Tolerance in Memristive Neural Networks},
   author={Yousuf, Osama and Hoskins, Brian and Ramu, Karthick and Fream, Mitchell and Borders, William A and Madhavan, Advait and Daniels, Matthew W and Dienstfrey, Andrew and McClelland, Jabez J and Lueker-Boden, Martin and Adam, Gina C},
   journal={arXiv preprint arXiv:2404.15621},
   year={2024}
