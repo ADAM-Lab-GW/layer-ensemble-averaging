@@ -40,10 +40,9 @@ If only plotting scripts need to be run, `requirements_plots.txt` can be used in
 | `data`  | Source datasets used for figures in the main text. Sub-directories are grouped by figure and panel numbers.     |
 | `plots` | Code for generating figures as presented in the main text.     |
 | `generated_plots`    | Output directory where all plots are stored by default. We provide plots for viewing purposes as part of the repository, so that the plotting code does not have to be re-run.    |
-| `generated_plots`    | Output directory where all plots are stored by default. We provide plots for viewing purposes as part of the repository, so that the plotting code does not have to be re-run.    |
+| `network`    | Code for training a network on the multi-task Yin-Yang classification dataset with elastic weight consolidation.    |
 
 ## Usage
-
 
 ### Generate Plots
 
@@ -89,7 +88,7 @@ To cite this repository, use the following BibTeX entry:
 
 ## License
 
-Distributed under the BSD-3 License. See LICENSE.txt for more information.
+Distributed under the BSD-3 License. See LICENSE.md for more information.
 
 ## Contact
 
