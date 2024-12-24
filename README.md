@@ -88,6 +88,19 @@ To cite *Layer Ensemble Averaging for Fault Tolerance in Memristive Neural Netwo
 
 To cite this repository, use the following BibTeX entry:
 
+```
+@software{osama_yousuf_2024_14550770,
+  author       = {Osama Yousuf},
+  title        = {ADAM-Lab-GW/layer-ensemble-averaging: v0.1.1},
+  month        = dec,
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {v0.1.1},
+  doi          = {10.5281/zenodo.14550770},
+  url          = {https://doi.org/10.5281/zenodo.14550770},
+}
+```
+
 ## License
 
 Distributed under the BSD-3 License. See LICENSE.md for more information.
